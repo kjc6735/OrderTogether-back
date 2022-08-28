@@ -29,7 +29,7 @@ export class User {
 
   @IsNotEmpty()
   @MaxLength(100)
-  @Column('varchar')
+  @Column('varchar', { nullable: false })
   addressEn: string;
 
   @MaxLength(100)
