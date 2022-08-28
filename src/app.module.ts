@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './entities/user.entity';
 import { UsersModule } from './users/users.module';
+import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
       entities: [User],
       synchronize: true,
     }),
+    JwtModule.forRoot({ jwtSecret: process.env.JWT_SECRET }),
     UsersModule,
   ],
   controllers: [AppController],

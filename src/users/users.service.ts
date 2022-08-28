@@ -1,3 +1,4 @@
+import { JwtService } from './../jwt/jwt.service';
 import { RegisterRequestDto, RegisterResponseDto } from './dtos/register.dto';
 import { LoginRequestDto, LoginResponseDto } from './dtos/login.dto';
 import { Repository } from './../../node_modules/typeorm/browser/repository/Repository';
@@ -9,6 +10,7 @@ import bcrypt from 'bcrypt';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async login({
@@ -29,13 +31,19 @@ export class UsersService {
       };
     }
     //비밀번호 해쉬가 맞을 때
-    //json 내려주기
-    if (bcrypt.compare(password, user.password)) {
+
+    if (!bcrypt.compare(password, user.password)) {
       return {
-        success: true,
-        message: '로그인 성공',
+        success: false,
+        message: '비밀번호를 잘못 입력했습니다.',
       };
     }
+
+    return {
+      success: true,
+      message: '로그인 성공',
+      token: this.jwtService.sign({ id: user.id, userId: user.userId }),
+    };
   }
 
   async register({

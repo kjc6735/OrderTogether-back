@@ -6,4 +6,6 @@ export class LoginRequestDto extends PickType(User, [
   'password',
 ] as const) {}
 
-export class LoginResponseDto extends ResponseDto {}
+export class LoginResponseDto extends ResponseDto {
+  token?: string;
+}
