@@ -10,7 +10,7 @@ export class Category {
   @IsNotEmpty()
   @MinLength(1)
   @MaxLength(100)
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { nullable: false, unique: true })
   name: string;
 
   @OneToMany(() => Store, (store) => store.category)
