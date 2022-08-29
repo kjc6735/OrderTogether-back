@@ -12,8 +12,8 @@ export class JwtModule {
       providers: [
         JwtService,
         {
-          provide: 'jwtSecret',
-          useValue: options,
+          provide: 'secretKey',
+          useValue: options.jwtSecret,
         },
       ],
       exports: [JwtService],

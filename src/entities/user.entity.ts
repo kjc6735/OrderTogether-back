@@ -1,5 +1,5 @@
-import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { IsEmpty, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import { Column, Entity, IsNull, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -9,7 +9,7 @@ export class User {
   @IsNotEmpty()
   @MaxLength(20)
   @MinLength(5)
-  @Column('varchar', { nullable: false, unique: true })
+  @Column('varchar', { nullable: false })
   userId: string;
 
   @IsNotEmpty()
@@ -32,7 +32,6 @@ export class User {
   @Column('varchar', { nullable: false })
   addressEn: string;
 
-  @MaxLength(100)
-  @Column('varchar')
+  @Column('varchar', { nullable: true })
   detail?: string;
 }

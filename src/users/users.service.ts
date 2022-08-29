@@ -1,11 +1,12 @@
+import { User } from './../entities/user.entity';
 import { JwtService } from './../jwt/jwt.service';
 import { RegisterRequestDto, RegisterResponseDto } from './dtos/register.dto';
 import { LoginRequestDto, LoginResponseDto } from './dtos/login.dto';
-import { Repository } from './../../node_modules/typeorm/browser/repository/Repository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -67,18 +68,19 @@ export class UsersService {
         };
       }
       const newUser = new User();
-      user.userId = userId;
-      user.password = await bcrypt.hash(password);
-      user.zonecode = zonecode;
-      user.addressKo = addressKo;
-      user.addressEn = addressEn;
-      user.detail = detail;
+      newUser.userId = userId;
+      newUser.password = await bcrypt.hash(password, 11);
+      newUser.zonecode = zonecode;
+      newUser.addressKo = addressKo;
+      newUser.addressEn = addressEn;
+      newUser.detail = detail;
       await this.userRepository.save(newUser);
       return {
         success: true,
         message: '회원가입 성공',
       };
     } catch (e) {
+      console.log(e);
       return {
         success: false,
         message: '회원가입 실패',

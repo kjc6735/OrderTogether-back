@@ -5,13 +5,15 @@ import { User } from 'src/entities/user.entity';
 import * as jsonwebtoken from 'jsonwebtoken';
 @Injectable()
 export class JwtService {
-  constructor(@Inject('jwtSecret') private readonly jwtSecret) {}
+  constructor(@Inject('secretKey') private readonly secretKey) {
+    console.log(this.secretKey);
+  }
 
   sign({ id, userId }) {
-    return jsonwebtoken.sign({ id, userId }, this.jwtSecret);
+    return jsonwebtoken.sign({ id, userId }, this.secretKey);
   }
 
   verify(token: string) {
-    return jsonwebtoken.verify(token, this.jwtSecret);
+    return jsonwebtoken.verify(token, this.secretKey);
   }
 }

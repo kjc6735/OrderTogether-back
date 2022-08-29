@@ -1,6 +1,6 @@
+import { User } from './../../entities/user.entity';
 import { ResponseDto } from './../../common/dtos/response.dto';
 import { PickType } from '@nestjs/mapped-types';
-import { User } from 'src/entities/user.entity';
 
 export class RegisterRequestDto extends PickType(User, [
   'userId',
