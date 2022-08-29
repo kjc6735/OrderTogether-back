@@ -1,3 +1,4 @@
+import { Category } from './entities/category.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,6 +7,7 @@ import { AppService } from './app.service';
 import { User } from './entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from './jwt/jwt.module';
+import { Store } from './entities/store.entity';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { JwtModule } from './jwt/jwt.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User],
+      entities: [User, Category, Store],
       synchronize: true,
     }),
     JwtModule.forRoot({ jwtSecret: process.env.JWT_SECRET }),
