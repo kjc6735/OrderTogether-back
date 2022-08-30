@@ -14,12 +14,15 @@ export class CategoriesService {
     private readonly storeRepository: Repository<Store>,
   ) {}
 
-  async getCategpries() {
+  async getCategories() {
     return this.categoryRepository.find() ?? null;
   }
 
   async getStoresByCategoryId(id) {
-    return this.categoryRepository.find(id) ?? null;
+    return this.categoryRepository.find({
+      where: { id },
+      relations: ['stores'],
+    });
   }
 
   async updateCategory(id, categoryUpdateRequestDto: CategoryUpdateRequestDto) {
@@ -41,8 +44,53 @@ export class CategoriesService {
     }
   }
   async createCategory(name) {
-    const category = this.categoryRepository.findOne({
-      where: name,
-    });
+    try {
+      const category = await this.categoryRepository.findOne({
+        where: { name },
+      });
+      if (category) {
+        return {
+          success: false,
+          message: '이미 존재하는 카테고리입니다.',
+        };
+      }
+      const newCategory = new Category();
+      newCategory.name = name;
+      await this.categoryRepository.save(newCategory);
+      return {
+        success: true,
+        message: '카테고리 생성 성공',
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        message: '카테고리 생성 실패',
+      };
+    }
+  }
+
+  async deleteCategory(id) {
+    try {
+      const category = await this.categoryRepository.findOne({
+        where: { id },
+      });
+      if (!category)
+        return {
+          success: false,
+          message: '존재하지 않는 카테고리입니다.',
+        };
+      await this.categoryRepository.delete(id);
+      return {
+        success: true,
+        message: '카테고리 삭제 성공',
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        message: '카테고리 삭제 실패',
+      };
+    }
   }
 }
