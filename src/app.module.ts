@@ -1,5 +1,7 @@
+import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { JwtMiddleware } from './middlewares/jwt.middleware';
 import { Category } from './entities/category.entity';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -17,15 +19,17 @@ import { StoresModule } from './stores/stores.module';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [User, Category, Store],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'mysql',
+        host: process.env.DB_HOST,
+        port: +process.env.DB_PORT,
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
+        entities: [User, Category, Store],
+        synchronize: true,
+      }),
     }),
     JwtModule.forRoot({ jwtSecret: process.env.JWT_SECRET }),
     UsersModule,
@@ -35,4 +39,12 @@ import { StoresModule } from './stores/stores.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(JwtMiddleware)
+      .forRoutes('*')
+      .apply(LoggerMiddleware)
+      .forRoutes('/categories/*');
+  }
+}
