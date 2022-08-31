@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { JwtModule } from './jwt/jwt.module';
 import { Store } from './entities/store.entity';
 import { CategoriesModule } from './categories/categories.module';
+import { StoresModule } from './stores/stores.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CategoriesModule } from './categories/categories.module';
     JwtModule.forRoot({ jwtSecret: process.env.JWT_SECRET }),
     UsersModule,
     CategoriesModule,
+    StoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,4 @@
 import { CategoryUpdateRequestDto } from './dtos/cateogry.update.dto';
-import { Store } from './../entities/store.entity';
 import { Category } from './../entities/category.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,8 +9,6 @@ export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
-    @InjectRepository(Store)
-    private readonly storeRepository: Repository<Store>,
   ) {}
 
   async getCategories() {
