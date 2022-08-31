@@ -1,7 +1,13 @@
+import { LoggedInMiddleware } from './middlewares/loggedin.middleware';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { JwtMiddleware } from './middlewares/jwt.middleware';
 import { Category } from './entities/category.entity';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -41,10 +47,10 @@ import { StoresModule } from './stores/stores.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    consumer.apply(JwtMiddleware).forRoutes('*');
     consumer
-      .apply(JwtMiddleware)
-      .forRoutes('*')
-      .apply(LoggerMiddleware)
-      .forRoutes('/categories/*');
+      .apply(LoggedInMiddleware)
+      .exclude({ path: 'users/*', method: RequestMethod.ALL }, 'users/(.*)')
+      .forRoutes('*');
   }
 }
