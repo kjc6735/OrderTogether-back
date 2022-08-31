@@ -12,28 +12,21 @@ export class JwtMiddleware implements NestMiddleware {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
-    const token = req.headers['token'];
-    if (!token)
-      return {
-        success: false,
-        message: '로그인이 되어있지 않습니다.',
-      };
     try {
-      const decode = this.jwtService.verify(token); // return user id
-      const user = await this.userRepository.findOne(decode.id);
-      if (!user) {
-        return {
-          success: false,
-          message: '유저를 찾을 수 없습니다.',
-        };
+      if (req.headers['token']) {
+        const token = req.headers['token'];
+        const decode = this.jwtService.verify(token);
+        const user = await this.userRepository.findOne({
+          where: { id: decode.id },
+        });
+        if (user) {
+          req['user'] = user;
+        }
       }
-      req['user'] = user;
     } catch (e) {
-      return {
-        success: false,
-        message: '토큰에러',
-      };
+      console.log(e);
     }
+
     next();
   }
 }
