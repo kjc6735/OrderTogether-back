@@ -1,3 +1,4 @@
+import { EventsModule } from './events/events.module';
 import { LoggedInMiddleware } from './middlewares/loggedin.middleware';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { JwtMiddleware } from './middlewares/jwt.middleware';
@@ -18,6 +19,8 @@ import { JwtModule } from './jwt/jwt.module';
 import { Store } from './entities/store.entity';
 import { CategoriesModule } from './categories/categories.module';
 import { StoresModule } from './stores/stores.module';
+import { Post } from './entities/post.entity';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -33,7 +36,8 @@ import { StoresModule } from './stores/stores.module';
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [User, Category, Store],
+        entities: [User, Category, Store, Post],
+        logging: true,
         synchronize: true,
       }),
     }),
@@ -41,6 +45,8 @@ import { StoresModule } from './stores/stores.module';
     UsersModule,
     CategoriesModule,
     StoresModule,
+    EventsModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

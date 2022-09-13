@@ -44,11 +44,13 @@ export class UsersService {
       success: true,
       message: '로그인 성공',
       token: this.jwtService.sign({ id: user.id, userId: user.userId }),
+      displayName: user.displayName,
     };
   }
 
   async register({
     userId,
+    displayName,
     password,
     zonecode,
     addressKo,
@@ -69,6 +71,7 @@ export class UsersService {
       }
       const newUser = new User();
       newUser.userId = userId;
+      newUser.displayName = displayName;
       newUser.password = await bcrypt.hash(password, 11);
       newUser.zonecode = zonecode;
       newUser.addressKo = addressKo;

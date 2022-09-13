@@ -8,4 +8,5 @@ export class LoginRequestDto extends PickType(User, [
 
 export class LoginResponseDto extends ResponseDto {
   token?: string;
+  displayName?: string;
 }

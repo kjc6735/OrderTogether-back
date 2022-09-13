@@ -4,6 +4,7 @@ import { PickType } from '@nestjs/mapped-types';
 
 export class RegisterRequestDto extends PickType(User, [
   'userId',
+  'displayName',
   'password',
   'zonecode',
   'addressKo',
