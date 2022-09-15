@@ -108,4 +108,41 @@ export class PostsService {
       };
     }
   }
+  async getPost(postId) {
+    try {
+      const post = await this.postRepository.findOne(postId);
+      if (!post)
+        return {
+          success: false,
+          message: '해당 게시글이 존재하지 않습니다.',
+        };
+      return post;
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        message: '에러 발생',
+      };
+    }
+  }
+  async getPostsFilteredByStoreId(storeId) {
+    try {
+      const post = await this.postRepository.find({
+        where: {
+          storeId: storeId,
+        },
+      });
+      return post;
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        message: '조회하는 도중 에러가 발생하였습니다.',
+      };
+    }
+  }
+
+  async getPosts() {
+    return this.postRepository.find();
+  }
 }
