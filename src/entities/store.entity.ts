@@ -1,5 +1,11 @@
 import { Category } from './category.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from 'typeorm';
 import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 @Entity()
@@ -16,4 +22,7 @@ export class Store {
   @IsNotEmpty()
   @ManyToOne(() => Category, (category) => category.stores, { nullable: false })
   category: Category;
+
+  @RelationId((store: Store) => store.category)
+  categoryId: number;
 }

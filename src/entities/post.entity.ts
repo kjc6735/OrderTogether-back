@@ -10,18 +10,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
+  RelationId,
 } from 'typeorm';
 
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  userId: number;
-
-  @Column()
-  storeId: number;
 
   @Column()
   title: string;
@@ -41,7 +36,13 @@ export class Post {
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
 
+  @RelationId((post: Post) => post.user)
+  userId: number;
+
   @OneToOne(() => Store, { nullable: false })
   @JoinColumn()
   store: Store;
+
+  @RelationId((post: Post) => post.store)
+  storeId: number;
 }

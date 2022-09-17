@@ -1,3 +1,7 @@
+import {
+  CreatePostRequestDto,
+  CreatePostResponseDto,
+} from './dtos/create.post.dto';
 import { Store } from './../entities/store.entity';
 import { Post } from './../entities/post.entity';
 import { Category } from './../entities/category.entity';
@@ -17,9 +21,14 @@ export class PostsService {
     private readonly storeRepository: Repository<Store>,
   ) {}
 
-  async create(userId, storeId, { title, describe }) {
+  async create(
+    user,
+    { storeId, title, describe }: CreatePostRequestDto,
+  ): Promise<CreatePostResponseDto> {
     try {
-      const isStore = await this.storeRepository.findOne(storeId);
+      const isStore = await this.storeRepository.findOne({
+        where: { id: storeId },
+      });
       if (!isStore) {
         return {
           success: false,
@@ -27,7 +36,7 @@ export class PostsService {
         };
       }
       const post = new Post();
-      post.userId = userId;
+      post.userId = user.id;
       post.storeId = storeId;
       post.title = title;
       post.describe = describe;
@@ -45,7 +54,7 @@ export class PostsService {
     }
   }
 
-  async delete(userId, postId) {
+  async delete(user, postId) {
     try {
       const isOwner = await this.postRepository.findOne({
         where: {
@@ -57,7 +66,7 @@ export class PostsService {
           success: false,
           message: '존재하지 않는 게시글입니다.',
         };
-      if (userId !== isOwner)
+      if (user.id !== isOwner)
         return {
           success: false,
           message: '게시글의 소유자가 아닙니다.',
