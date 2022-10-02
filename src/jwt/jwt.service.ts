@@ -22,7 +22,9 @@ export class JwtService {
 
   async getUser(id) {
     try {
-      const user = this.userRepository.findOne(id);
+      const user = this.userRepository.findOne({
+        where: { id },
+      });
       return user;
     } catch (e) {
       console.log(e);

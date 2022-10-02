@@ -36,10 +36,12 @@ export class PostsService {
         };
       }
       const post = new Post();
+
       post.userId = user.id;
-      post.storeId = storeId;
+      post.storeId = isStore.id;
       post.title = title;
       post.describe = describe;
+      console.log(post);
       await this.postRepository.save(post);
       return {
         success: true,
@@ -152,6 +154,16 @@ export class PostsService {
   }
 
   async getPosts() {
-    return this.postRepository.find();
+    try {
+      console.log('posts');
+      const posts = await this.postRepository.find({ where: { id: 1 } });
+
+      return posts ? posts : null;
+    } catch (e) {
+      return {
+        success: false,
+        message: 'error',
+      };
+    }
   }
 }

@@ -5,16 +5,14 @@ import { NextFunction } from 'express';
 
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
-  constructor(private readonly jwtService: JwtService) {
-    console.log('jwt middleware');
-  }
+  constructor(private readonly jwtService: JwtService) {}
   async use(req: Request, res: Response, next: NextFunction) {
     console.log('jwt muddleware');
     try {
       if (req.headers['token']) {
         const token = req.headers['token'];
         const decode = this.jwtService.verify(token);
-        const user = this.jwtService.getUser(decode.id);
+        const user = await this.jwtService.getUser(decode.id);
         if (user) {
           req['user'] = user;
         }
@@ -22,7 +20,6 @@ export class JwtMiddleware implements NestMiddleware {
     } catch (e) {
       console.log(e);
     }
-
     next();
   }
 }

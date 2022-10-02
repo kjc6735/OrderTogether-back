@@ -1,3 +1,4 @@
+import { changeAddressToCoordinate } from './../utils/geolocationApi';
 import { User } from './../entities/user.entity';
 import { JwtService } from './../jwt/jwt.service';
 import { RegisterRequestDto, RegisterResponseDto } from './dtos/register.dto';
@@ -69,6 +70,8 @@ export class UsersService {
           message: '이미 존재하는 아이디입니다.',
         };
       }
+      const { lat, lng } = await changeAddressToCoordinate(addressKo)[0]
+        .results;
       const newUser = new User();
       newUser.userId = userId;
       newUser.displayName = displayName;
@@ -77,6 +80,8 @@ export class UsersService {
       newUser.addressKo = addressKo;
       newUser.addressEn = addressEn;
       newUser.detail = detail;
+      newUser.latitude = lat;
+      newUser.longitude = lng;
       await this.userRepository.save(newUser);
       return {
         success: true,

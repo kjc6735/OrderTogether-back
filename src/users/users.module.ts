@@ -1,4 +1,4 @@
-import { EventsModule } from './../events/events.module';
+import { EventsModule } from '../events/db.event.module';
 import { User } from './../entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';

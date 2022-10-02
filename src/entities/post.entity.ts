@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
   RelationId,
 } from 'typeorm';
+import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 @Entity()
 export class Post {
@@ -39,10 +40,28 @@ export class Post {
   @RelationId((post: Post) => post.user)
   userId: number;
 
-  @OneToOne(() => Store, { nullable: false })
-  @JoinColumn()
+  @ManyToOne(() => Store, (store) => store.posts)
   store: Store;
 
   @RelationId((post: Post) => post.store)
   storeId: number;
+
+  @IsNotEmpty()
+  @MaxLength(5)
+  @MinLength(5)
+  @Column('varchar', { nullable: false })
+  zonecode: string;
+
+  @IsNotEmpty()
+  @MaxLength(100)
+  @Column('varchar', { nullable: false })
+  addressKo: string;
+
+  @IsNotEmpty()
+  @MaxLength(100)
+  @Column('varchar', { nullable: false })
+  addressEn: string;
+
+  @Column('varchar', { nullable: true })
+  detail?: string;
 }

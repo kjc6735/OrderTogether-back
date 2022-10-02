@@ -14,18 +14,21 @@ import { User } from '../decorators/user.decorator';
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
+
+  @Get('')
+  getPosts() {
+    console.log('afaasfa');
+    return this.postsService.getPosts();
+  }
+
   @Get(':id')
   getPost(@Param() id) {
     return this.postsService.getPost(id);
   }
 
-  @Get('')
-  getPosts() {
-    return this.postsService.getPosts();
-  }
-
   @Post('')
   createPost(@User() user, @Body() createPostRequestDto: CreatePostRequestDto) {
+    console.log(createPostRequestDto);
     this.postsService.create(user, createPostRequestDto);
   }
 

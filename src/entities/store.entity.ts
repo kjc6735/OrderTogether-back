@@ -3,10 +3,12 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
 import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import { Post } from './post.entity';
 
 @Entity()
 export class Store {
@@ -25,4 +27,7 @@ export class Store {
 
   @RelationId((store: Store) => store.category)
   categoryId: number;
+
+  @OneToMany(() => Post, (post) => post.store)
+  posts: Post[];
 }
