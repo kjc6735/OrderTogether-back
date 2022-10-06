@@ -156,7 +156,7 @@ export class PostsService {
   async getPosts() {
     try {
       console.log('posts');
-      const posts = await this.postRepository.find({ where: { id: 1 } });
+      const posts = await this.postRepository.find();
 
       return posts ? posts : null;
     } catch (e) {

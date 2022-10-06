@@ -14,6 +14,7 @@ export class UsersController {
   register(
     @Body() registerRequestDto: RegisterRequestDto,
   ): Promise<RegisterResponseDto> {
+    console.log('regiter');
     return this.usersService.register(registerRequestDto);
   }
 }

@@ -3,7 +3,12 @@ import { User } from './../entities/user.entity';
 import { JwtService } from './../jwt/jwt.service';
 import { RegisterRequestDto, RegisterResponseDto } from './dtos/register.dto';
 import { LoginRequestDto, LoginResponseDto } from './dtos/login.dto';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
@@ -14,11 +19,14 @@ export class UsersService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
+  private readonly logger = new Logger(UsersService.name);
 
   async login({
     userId,
     password,
   }: LoginRequestDto): Promise<LoginResponseDto> {
+    this.logger.log('login ');
+    // try {
     const user = await this.userRepository.findOne({
       where: {
         userId,
@@ -26,27 +34,37 @@ export class UsersService {
     });
 
     //유저가 존재하지 않을 떄
-    if (!user) {
-      return {
-        success: false,
-        message: '존재하지 않는 유저입니다.',
-      };
-    }
+    // if (!user) {
+    //   return {
+    //     success: false,
+    //     message: '존재하지 않는 유저입니다.',
+    //   };
+    // }
+    if (!user) throw new ForbiddenException('존재하지 않는 아이디입니다.');
     //비밀번호 해쉬가 맞을 때
 
-    if (!bcrypt.compare(password, user.password)) {
-      return {
-        success: false,
-        message: '비밀번호를 잘못 입력했습니다.',
-      };
-    }
+    const comparePassword = await bcrypt.compare(password, user.password);
+    // if (!comparePassword) {
+    //   return {
+    //     success: false,
+    //     message: '비밀번호를 잘못 입력했습니다.',
+    //   };
+    // }
 
+    if (!comparePassword) {
+      throw new BadRequestException('비밀번호가 다릅니다.');
+    }
+    const { password: pwd, ...withoutPasswordUser } = user;
+    this.logger.log('test4');
     return {
       success: true,
       message: '로그인 성공',
       token: this.jwtService.sign({ id: user.id, userId: user.userId }),
-      displayName: user.displayName,
+      user: withoutPasswordUser,
     };
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   async register({
@@ -58,41 +76,26 @@ export class UsersService {
     addressEn,
     detail = null,
   }: RegisterRequestDto): Promise<RegisterResponseDto> {
-    try {
-      const user = await this.userRepository.findOne({
-        where: {
-          userId,
-        },
-      });
-      if (user) {
-        return {
-          success: false,
-          message: '이미 존재하는 아이디입니다.',
-        };
-      }
-      const { lat, lng } = await changeAddressToCoordinate(addressKo)[0]
-        .results;
-      const newUser = new User();
-      newUser.userId = userId;
-      newUser.displayName = displayName;
-      newUser.password = await bcrypt.hash(password, 11);
-      newUser.zonecode = zonecode;
-      newUser.addressKo = addressKo;
-      newUser.addressEn = addressEn;
-      newUser.detail = detail;
-      newUser.latitude = lat;
-      newUser.longitude = lng;
-      await this.userRepository.save(newUser);
-      return {
-        success: true,
-        message: '회원가입 성공',
-      };
-    } catch (e) {
-      console.log(e);
-      return {
-        success: false,
-        message: '회원가입 실패',
-      };
-    }
+    const user = await this.userRepository.findOne({
+      where: {
+        userId,
+      },
+    });
+
+    if (user) throw new ForbiddenException('이미 존재하는 아이디입니다..');
+
+    const newUser = new User();
+    newUser.userId = userId;
+    newUser.displayName = displayName;
+    newUser.password = password;
+    newUser.zonecode = zonecode;
+    newUser.addressKo = addressKo;
+    newUser.addressEn = addressEn;
+    newUser.detail = detail;
+    await this.userRepository.save(newUser);
+    return {
+      success: true,
+      message: '회원가입 성공',
+    };
   }
 }

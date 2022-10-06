@@ -7,19 +7,21 @@ import { NextFunction } from 'express';
 export class JwtMiddleware implements NestMiddleware {
   constructor(private readonly jwtService: JwtService) {}
   async use(req: Request, res: Response, next: NextFunction) {
-    console.log('jwt muddleware');
     try {
       if (req.headers['token']) {
         const token = req.headers['token'];
         const decode = this.jwtService.verify(token);
         const user = await this.jwtService.getUser(decode.id);
-        if (user) {
-          req['user'] = user;
-        }
+        req['user'] = user ?? null;
+        console.log(req['user'] ?? 'error');
+        console.log('user is ', req['user']);
+      } else {
+        console.log('zz');
       }
     } catch (e) {
       console.log(e);
+    } finally {
+      next();
     }
-    next();
   }
 }

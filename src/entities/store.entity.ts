@@ -2,6 +2,7 @@ import { Category } from './category.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -25,6 +26,7 @@ export class Store {
   @ManyToOne(() => Category, (category) => category.stores, { nullable: false })
   category: Category;
 
+  @Column({ nullable: false })
   @RelationId((store: Store) => store.category)
   categoryId: number;
 
