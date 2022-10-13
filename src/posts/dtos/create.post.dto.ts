@@ -6,6 +6,7 @@ export class CreatePostRequestDto extends PickType(Post, [
   'storeId',
   'title',
   'describe',
+  'addressKo',
 ]) {}
 
 export class CreatePostResponseDto extends ResponseDto {}

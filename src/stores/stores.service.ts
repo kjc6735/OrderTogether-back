@@ -1,3 +1,4 @@
+import { Post } from './../entities/post.entity';
 import { StoreUpdateRequestDto } from './dtos/store.update.dto';
 import { Category } from './../entities/category.entity';
 import { CreateStoreRequestDto } from './dtos/create.store.dto';
@@ -13,10 +14,21 @@ export class StoresService {
     private readonly storeRepository: Repository<Store>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(Post)
+    private readonly postRepository: Repository<Post>,
   ) {}
 
   getAll() {
     return this.storeRepository.find();
+  }
+
+  async getPostsByStoreId(id: number) {
+    const store = await this.storeRepository.findOne({ where: { id } });
+    return this.postRepository.find({
+      where: {
+        storeId: store.id,
+      },
+    });
   }
 
   async create({

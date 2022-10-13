@@ -33,23 +33,10 @@ export class UsersService {
       },
     });
 
-    //유저가 존재하지 않을 떄
-    // if (!user) {
-    //   return {
-    //     success: false,
-    //     message: '존재하지 않는 유저입니다.',
-    //   };
-    // }
     if (!user) throw new ForbiddenException('존재하지 않는 아이디입니다.');
     //비밀번호 해쉬가 맞을 때
 
     const comparePassword = await bcrypt.compare(password, user.password);
-    // if (!comparePassword) {
-    //   return {
-    //     success: false,
-    //     message: '비밀번호를 잘못 입력했습니다.',
-    //   };
-    // }
 
     if (!comparePassword) {
       throw new BadRequestException('비밀번호가 다릅니다.');
@@ -62,9 +49,6 @@ export class UsersService {
       token: this.jwtService.sign({ id: user.id, userId: user.userId }),
       user: withoutPasswordUser,
     };
-    // } catch (e) {
-    //   throw e;
-    // }
   }
 
   async register({

@@ -23,8 +23,9 @@ export class PostsService {
 
   async create(
     user,
-    { storeId, title, describe }: CreatePostRequestDto,
+    { storeId, title, describe, addressKo }: CreatePostRequestDto,
   ): Promise<CreatePostResponseDto> {
+    console.log('tetest');
     try {
       const isStore = await this.storeRepository.findOne({
         where: { id: storeId },
@@ -41,6 +42,7 @@ export class PostsService {
       post.storeId = isStore.id;
       post.title = title;
       post.describe = describe;
+      post.addressKo = addressKo;
       console.log(post);
       await this.postRepository.save(post);
       return {

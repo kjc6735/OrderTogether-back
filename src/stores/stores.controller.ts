@@ -24,6 +24,11 @@ export class StoresController {
     return this.storesService.getAll();
   }
 
+  @Get('/:id/posts')
+  getPostsByStoreId(@Param() id: number) {
+    return this.storesService.getPostsByStoreId(id);
+  }
+
   @Post('/')
   create(@Body() createStoreRequestDto: CreateStoreRequestDto) {
     return this.storesService.create(createStoreRequestDto);
