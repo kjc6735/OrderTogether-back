@@ -1,3 +1,4 @@
+import { RoomMember } from './src/entities/roomMember.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Room } from './src/entities/room.entity';
 import { DM } from './src/entities/dm.entity';
@@ -23,7 +24,7 @@ module.exports = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [User, Category, Store, Post, DM, Room],
+  entities: [User, Category, Store, Post, DM, Room, RoomMember],
   logging: true,
   synchronize: true,
   migrations: [__dirname + '/src/migrations/*.ts'],

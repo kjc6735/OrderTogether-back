@@ -1,3 +1,4 @@
+import { RoomMember } from './roomMember.entity';
 import { User } from './user.entity';
 import {
   Column,
@@ -17,6 +18,6 @@ export class Room {
   @Column()
   name: string;
 
-  @OneToMany(() => DM, (dm) => dm.room)
-  dms: DM[];
+  @OneToMany(() => RoomMember, (roomMember) => roomMember.room)
+  members: RoomMember[];
 }

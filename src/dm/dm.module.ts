@@ -1,3 +1,5 @@
+import { RoomMember } from './../entities/roomMember.entity';
+import { EventsModule } from './../events/dm.event.module';
 import { DM } from './../entities/dm.entity';
 import { Room } from './../entities/room.entity';
 import { User } from './../entities/user.entity';
@@ -7,7 +9,10 @@ import { DmService } from './dm.service';
 import { DmController } from './dm.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Room, DM])],
+  imports: [
+    EventsModule,
+    TypeOrmModule.forFeature([User, Room, DM, RoomMember]),
+  ],
   providers: [DmService],
   controllers: [DmController],
 })

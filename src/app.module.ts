@@ -1,8 +1,6 @@
-import { EventsModule } from './events/db.event.module';
 import { LoggedInMiddleware } from './middlewares/loggedin.middleware';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { JwtMiddleware } from './middlewares/jwt.middleware';
-import { Category } from './entities/category.entity';
 import {
   MiddlewareConsumer,
   Module,

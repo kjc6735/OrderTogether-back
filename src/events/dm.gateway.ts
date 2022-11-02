@@ -14,6 +14,10 @@ import { Server, Socket } from 'socket.io';
 export class DmGateway
   implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect
 {
+  handleConnection(@ConnectedSocket() socket: Socket, ...args: any[]) {
+    console.log(`socket nsp is ${socket}`);
+  }
+
   @WebSocketServer() public server: Server;
 
   @SubscribeMessage('message')
@@ -22,19 +26,11 @@ export class DmGateway
   }
 
   @SubscribeMessage('login')
-  login(
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() data: { chatList: string[] },
-  ) {
-    data.chatList.forEach((element) => {
-      console.log(`socket join ${socket.nsp.name} ${element}`);
-      console.log(`socket id : ${socket.id}`);
-      socket.join(element);
-    });
+  login(@ConnectedSocket() socket: Socket) {
+    socket.join('test');
+    console.log(socket.id);
   }
-  handleConnection(@ConnectedSocket() socket: Socket) {
-    console.log('connected socket: ', socket.nsp.name);
-  }
+
   afterInit(server: any) {
     console.log('after init');
   }

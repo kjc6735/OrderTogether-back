@@ -23,7 +23,9 @@ export class StoresService {
   }
 
   async getPostsByStoreId(id: number) {
+    console.log(id);
     const store = await this.storeRepository.findOne({ where: { id } });
+    console.log(store);
     return this.postRepository.find({
       where: {
         storeId: store.id,

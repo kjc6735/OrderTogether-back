@@ -1,3 +1,4 @@
+import { RoomMember } from './roomMember.entity';
 import { changeAddressToCoordinate } from './../utils/geolocationApi';
 import { Room } from './room.entity';
 import { IsEmpty, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
@@ -86,11 +87,8 @@ export class User {
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  @OneToMany(() => DM, (dm) => dm.sender)
-  dm: DM[];
-
-  @OneToMany(() => DM, (dm) => dm.receiver)
-  dm2: DM[];
+  @OneToMany(() => RoomMember, (roomMember) => roomMember.user)
+  members: RoomMember[];
 
   @BeforeInsert()
   async hashPassword() {

@@ -25,7 +25,7 @@ export class StoresController {
   }
 
   @Get('/:id/posts')
-  getPostsByStoreId(@Param() id: number) {
+  getPostsByStoreId(@Param('id') id: number) {
     return this.storesService.getPostsByStoreId(id);
   }
 
