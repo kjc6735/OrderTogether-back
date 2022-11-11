@@ -21,8 +21,10 @@ export class DmGateway
   @WebSocketServer() public server: Server;
 
   @SubscribeMessage('message')
-  handleMessage(@ConnectedSocket() socket: Server, payload: any) {
-    console.log(payload);
+  handleMessage(@ConnectedSocket() socket: Server, @MessageBody() data) {
+    const { roomId, input } = data;
+    console.log(data);
+    socket.to(roomId).emit('message', input);
   }
 
   @SubscribeMessage('join')
