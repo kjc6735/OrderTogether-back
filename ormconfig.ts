@@ -25,7 +25,7 @@ module.exports = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   entities: [User, Category, Store, Post, DM, Room, RoomMember],
-  logging: true,
+  logging: false,
   synchronize: true,
   migrations: [__dirname + '/src/migrations/*.ts'],
   //   cli: { migrationsDir: 'src/migrations' },

@@ -26,6 +26,11 @@ export class PostsController {
     return this.postsService.getPost(id);
   }
 
+  @Get('/user/me')
+  getMyPost(@User() user) {
+    return this.postsService.getMyPosts(user);
+  }
+
   @Post('')
   createPost(@User() user, @Body() createPostRequestDto: CreatePostRequestDto) {
     console.log(createPostRequestDto);
@@ -38,7 +43,8 @@ export class PostsController {
   }
 
   @Delete(':id')
-  delete(@Param() id, @User() user) {
+  delete(@Param('id') id, @User() user) {
+    console.log('delete');
     return this.postsService.delete(user, id);
   }
 }

@@ -15,14 +15,20 @@ export class DmGateway
   implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect
 {
   handleConnection(@ConnectedSocket() socket: Socket, ...args: any[]) {
-    console.log(`socket nsp is ${socket}`);
+    console.log(`socket nsp is ${socket.nsp.name} socket.id : ${socket.id}`);
   }
 
   @WebSocketServer() public server: Server;
 
   @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): string {
-    return 'Hello world!';
+  handleMessage(@ConnectedSocket() socket: Server, payload: any) {
+    console.log(payload);
+  }
+
+  @SubscribeMessage('join')
+  joinRoom(@ConnectedSocket() socket: Socket, @MessageBody() data) {
+    socket.join(data.roomId);
+    socket.emit('message', data);
   }
 
   @SubscribeMessage('login')

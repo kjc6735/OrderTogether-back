@@ -22,6 +22,7 @@ import { PostsModule } from './posts/posts.module';
 import { DmModule } from './dm/dm.module';
 import { DM } from './entities/dm.entity';
 import { Room } from './entities/room.entity';
+import { RoomModule } from './room/room.module';
 import * as ormconfig from '../ormconfig';
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import * as ormconfig from '../ormconfig';
     StoresModule,
     PostsModule,
     DmModule,
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

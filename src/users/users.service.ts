@@ -1,3 +1,5 @@
+import { RoomMember } from './../entities/roomMember.entity';
+import { Room } from './../entities/room.entity';
 import { changeAddressToCoordinate } from './../utils/geolocationApi';
 import { User } from './../entities/user.entity';
 import { JwtService } from './../jwt/jwt.service';
@@ -17,6 +19,10 @@ import { Repository } from 'typeorm';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Room) private readonly roomRepository: Repository<Room>,
+
+    @InjectRepository(RoomMember)
+    private readonly roomMemberRepository: Repository<RoomMember>,
     private readonly jwtService: JwtService,
   ) {}
   private readonly logger = new Logger(UsersService.name);
@@ -82,4 +88,5 @@ export class UsersService {
       message: '회원가입 성공',
     };
   }
+
 }

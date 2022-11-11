@@ -7,12 +7,13 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { DM } from './dm.entity';
 
 @Entity()
 export class Room {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -20,4 +21,7 @@ export class Room {
 
   @OneToMany(() => RoomMember, (roomMember) => roomMember.room)
   members: RoomMember[];
+
+  @OneToMany(() => DM, (dm) => dm.room)
+  dms: DM[];
 }

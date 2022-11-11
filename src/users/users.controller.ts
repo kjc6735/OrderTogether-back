@@ -17,4 +17,6 @@ export class UsersController {
     console.log('regiter');
     return this.usersService.register(registerRequestDto);
   }
+
+  
 }

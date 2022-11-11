@@ -90,6 +90,9 @@ export class User {
   @OneToMany(() => RoomMember, (roomMember) => roomMember.user)
   members: RoomMember[];
 
+  @OneToMany(() => DM, (dm) => dm.sender)
+  dms: DM[];
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 11);

@@ -1,3 +1,4 @@
+import { DM } from './dm.entity';
 import { Room } from './room.entity';
 import { User } from './user.entity';
 import {
@@ -7,18 +8,11 @@ import {
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
 export class RoomMember {
-  /*
-   @ManyToOne(() => Workspaces, (workspaces) => workspaces.DMs, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'WorkspaceId', referencedColumnName: 'id' }])
-  Workspace: Workspaces;
-  */
   @PrimaryGeneratedColumn()
   id: number;
 

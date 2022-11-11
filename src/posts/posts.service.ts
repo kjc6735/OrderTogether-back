@@ -59,6 +59,7 @@ export class PostsService {
   }
 
   async delete(user, postId) {
+    console.log('opostid is', postId);
     try {
       const isOwner = await this.postRepository.findOne({
         where: {
@@ -70,7 +71,7 @@ export class PostsService {
           success: false,
           message: '존재하지 않는 게시글입니다.',
         };
-      if (user.id !== isOwner)
+      if (user.id !== isOwner.userId)
         return {
           success: false,
           message: '게시글의 소유자가 아닙니다.',
@@ -81,7 +82,6 @@ export class PostsService {
         message: '게시글 삭제 성공',
       };
     } catch (e) {
-      console.log(e);
       return {
         success: false,
         message: '게시글 삭제 실패',
@@ -160,12 +160,22 @@ export class PostsService {
       console.log('posts');
       const posts = await this.postRepository.find();
 
-      return posts ? posts : null;
+      return posts ?? null;
     } catch (e) {
       return {
         success: false,
         message: 'error',
       };
     }
+  }
+
+  async getMyPosts(user) {
+    const posts = await this.postRepository.find({
+      where: {
+        userId: user.id,
+      },
+    });
+    console.log('posts :: ', posts);
+    return posts;
   }
 }
