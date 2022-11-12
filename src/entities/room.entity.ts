@@ -2,6 +2,7 @@ import { RoomMember } from './roomMember.entity';
 import { User } from './user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -18,6 +19,9 @@ export class Room {
 
   @Column()
   name: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @OneToMany(() => RoomMember, (roomMember) => roomMember.room)
   members: RoomMember[];

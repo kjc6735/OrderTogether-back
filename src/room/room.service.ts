@@ -105,34 +105,35 @@ export class RoomService {
       where: {
         user: user.id,
       },
+    });
+    const roomIds = findRoom.map((roomIdObj) => ({
+      id: roomIdObj.id,
+      user: Not(user.id),
+    }));
+
+    const result = await this.roomMemberRepository.find({
+      select: {
+        user: {
+          displayName: true,
+          userId: true,
+        },
+        room: {
+          name: true,
+          createdAt: true,
+        },
+      },
+      where: [...roomIds],
       relations: {
+        user: true,
         room: true,
       },
     });
-
-    const arr = findRoom.map((i) => {
-      return { room: i.room };
-    });
-    const findUserName = await this.roomMemberRepository.find({});
-    // const findUserName = await this.roomMemberRepository.find({
-    //   where: [
-    //     {
-    //       user: Not(user.id),
-    //     },
-    //     ...arr,
-    //   ],
+    console.log(result);
+    // const removedId = result.map((r) => {
+    //   delete r.id;
+    //   return r;
     // });
-    // await this.roomMemberRepository
-    //   .createQueryBuilder('roomMember')
-    //   .leftJoin('roomMember.user', 'user')
-    //   .leftJoin('roomMember.room', 'room')
-    //   .addSelect('user.userId')
-    //   .addSelect('room.name')
-    //   // .addSelect('roomMember.userId', 'userId')
-    //   // .addSelect('roomMember.roomId', 'roomId')
-    //   .where('user.id=:id', { id: user.id })
-    //   .getMany();
-
-    return findRoom;
+    // return removedId;
+    return result;
   }
 }

@@ -50,4 +50,13 @@ export class DmService {
     dm.sender = user.id;
     await this.dmsRepository.save(dm);
   }
+
+  async getMyDmList(user) {
+    const myRoom = await this.roomMemberRepository.find({
+      where: {
+        user: user.id,
+      },
+    });
+    console.log(myRoom);
+  }
 }
