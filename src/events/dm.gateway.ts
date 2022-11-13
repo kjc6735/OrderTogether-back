@@ -20,17 +20,18 @@ export class DmGateway
 
   @WebSocketServer() public server: Server;
 
-  @SubscribeMessage('message')
-  handleMessage(@ConnectedSocket() socket: Server, @MessageBody() data) {
+  @SubscribeMessage('sendToServer')
+  handleMessage(@ConnectedSocket() socket: Socket, @MessageBody() data) {
     const { roomId, input } = data;
-    console.log(data);
-    socket.to(roomId).emit('message', input);
+    console.log(roomId, input);
+    socket.emit('message', `${input}`);
+    // this.server.to(roomId).emit('message', input);
   }
 
   @SubscribeMessage('join')
   joinRoom(@ConnectedSocket() socket: Socket, @MessageBody() data) {
     socket.join(data.roomId);
-    socket.emit('message', data);
+    socket.to(data.roomId).emit('message', '성공');
   }
 
   @SubscribeMessage('login')
