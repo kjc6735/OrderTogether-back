@@ -22,10 +22,9 @@ export class DmGateway
 
   @SubscribeMessage('sendToServer')
   handleMessage(@ConnectedSocket() socket: Socket, @MessageBody() data) {
-    const { roomId, input } = data;
-    console.log(roomId, input);
-    socket.emit('message', `${input}`);
-    // this.server.to(roomId).emit('message', input);
+    const { roomId, message, user } = data;
+    // socket.emit('message', `${input}`);
+    this.server.to(roomId).emit('message', { message, user });
   }
 
   @SubscribeMessage('join')
