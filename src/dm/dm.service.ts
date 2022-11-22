@@ -37,13 +37,21 @@ export class DmService {
   }
 
   async createDM(user, roomId, message) {
-    const isRoomMember = await this.roomMemberRepository.findOne({
-      where: {
-        user: user.id,
-        room: roomId,
-      },
-    });
-    if (!isRoomMember) throw new BadRequestException('잘못된 요청입니다.');
+    // const isRoomMember = await this.roomMemberRepository.findOne({
+    //   where: {
+    //     user: user.id,
+    //     room: roomId,
+    //   },
+    // });
+    // if (!isRoomMember) throw new BadRequestException('잘못된 요청입니다.');
+    const isRoomMember = await this.roomMemberRepository
+      .createQueryBuilder('roomMember')
+      .leftJoin('roomMember.user', 'user')
+      .leftJoin('roomMember.room', 'room')
+      .where('room.name = :name', { name: roomId })
+      .andWhere('roomMember.userId = :userId', { userId: user.id })
+      .andWhere('roomMember.roomId = :roomId', {})
+      .getOne();
     const dm = new DM();
     dm.mesage = message;
     dm.room = roomId;
