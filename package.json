@@ -89,6 +89,23 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns":[
+      "node_modules",
+      ".entity.ts",
+      ".constants.ts",
+      ".dto.ts",
+      ".module.ts",
+      ".middleware.ts",
+      ".controller.ts",
+      ".seed.ts",
+      ".factory.ts",
+      ".decorator.ts",
+      ".gateway.ts"
+
+
+
+
+    ]
   }
 }

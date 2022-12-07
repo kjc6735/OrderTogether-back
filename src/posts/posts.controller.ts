@@ -15,20 +15,23 @@ import { User } from '../decorators/user.decorator';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @Get('/user/me')
+  getMyPost(@User() user) {
+    console.log('c');
+    return this.postsService.getMyPosts(user);
+  }
+
   @Get('')
   getPosts() {
-    console.log('afaasfa');
+    console.log('a');
     return this.postsService.getPosts();
   }
 
   @Get(':id')
   getPost(@Param() id) {
-    return this.postsService.getPost(id);
-  }
+    console.log('b');
 
-  @Get('/user/me')
-  getMyPost(@User() user) {
-    return this.postsService.getMyPosts(user);
+    return this.postsService.getPost(id);
   }
 
   @Post('')

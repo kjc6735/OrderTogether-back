@@ -30,7 +30,6 @@ export class DmGateway
   @SubscribeMessage('join')
   joinRoom(@ConnectedSocket() socket: Socket, @MessageBody() data) {
     socket.join(data.roomId);
-    socket.to(data.roomId).emit('message', '성공');
   }
 
   @SubscribeMessage('login')
